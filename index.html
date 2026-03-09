@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Portfolio | LamLam44</title>
+  <title>My Portfolio</title>
   <style>
     /* ── Reset & Base ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --accent:  #6c63ff;
       --accent2: #f50057;
@@ -19,148 +18,99 @@
       --border:  rgba(108,99,255,.35);
       --radius:  12px;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; min-height: 100vh;
     }
-
     a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    /* ── Utility ──────────────────────────────────────────────── */
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
-
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 18px; border-radius: 8px; border: none;
-      cursor: pointer; font-size: .85rem; font-weight: 600;
-      transition: opacity .2s, transform .15s;
+      cursor: pointer; font-size: .85rem; font-weight: 600; transition: 0.2s;
     }
-    .btn:hover { opacity: .85; transform: translateY(-1px); }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); }
 
-    /* ── Edit-mode overlay ────────────────────────────────────── */
+    /* ── Edit Bar ─────────────────────────────────────────────── */
     #edit-bar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 999;
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 10px 20px;
-      background: rgba(108,99,255,.92);
-      font-size: .85rem; font-weight: 600; color: #fff;
-      box-shadow: 0 2px 12px rgba(0,0,0,.4);
-      transition: transform .3s;
+      padding: 10px; background: var(--accent); color: #fff;
+      font-size: .85rem; transition: transform 0.3s;
     }
     #edit-bar.hidden { transform: translateY(-100%); }
 
     /* ── Nav ──────────────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(15,15,26,.88);
-      backdrop-filter: blur(12px);
+      background: rgba(15,15,26,.88); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-    nav .container {
-      display: flex; align-items: center; justify-content: space-between;
-      height: 60px;
-    }
-    .nav-brand { font-weight: 800; font-size: 1.1rem; color: var(--accent); }
+    nav .container { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 800; color: var(--accent); }
     .nav-links { display: flex; gap: 20px; list-style: none; }
     .nav-links a { color: var(--muted); font-size: .9rem; }
-    #toggle-edit-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); padding: 7px 16px; border-radius: 8px; cursor: pointer;
-    }
+    #toggle-edit-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
 
-    /* ── Hero ─────────────────────────────────────────────────── */
-    #hero { padding: 80px 0 50px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
-    .avatar-wrap { position: relative; flex-shrink: 0; }
-    .avatar-wrap img#avatar {
-      width: 160px; height: 160px; border-radius: 50%;
-      border: 4px solid var(--accent); object-fit: cover;
-    }
-    .editing #avatar-edit-btn { display: flex; position: absolute; bottom: 5px; right: 5px; background: var(--accent); border: none; border-radius: 50%; width: 35px; height: 35px; justify-content: center; align-items: center; cursor: pointer;}
+    /* ── Sections ─────────────────────────────────────────────── */
+    section { padding: 80px 0 40px; }
+    .section-title { font-size: 2rem; margin-bottom: 30px; text-align: center; }
+    .section-title span { color: var(--accent); }
+
+    /* Hero */
+    #hero { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; padding-top: 100px; }
+    .avatar-wrap { position: relative; }
+    #avatar { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; }
+    .editing #avatar-edit-btn { display: flex; position: absolute; bottom: 10px; right: 10px; background: var(--accent); border: none; border-radius: 50%; width: 35px; height: 35px; justify-content: center; align-items: center; cursor: pointer; }
     #avatar-edit-btn { display: none; }
+    .hero-name { font-size: 3rem; font-weight: 800; }
+    .hero-name span { color: var(--accent); }
 
-    /* ── Skills (FIXED: CENTERED) ────────────────────────────── */
-    #skills { text-align: center; }
-    .skills-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      justify-content: center; /* Đưa các thẻ skill ra giữa */
-      margin-top: 20px;
-    }
-    .skill-tag {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .remove-skill { color: var(--accent2); cursor: pointer; display: none; margin-left: 5px; font-weight: bold; }
+    /* About */
+    #about { background: var(--surface); border-radius: var(--radius); padding: 40px; margin-top: 40px; }
+
+    /* Skills */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+    .skill-tag { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 30px; display: flex; align-items: center; gap: 10px; }
+    .remove-skill { color: var(--accent2); cursor: pointer; display: none; font-weight: bold; }
     .editing .remove-skill { display: inline; }
-    
-    .editing #add-skill-wrap { display: flex; justify-content: center; margin-top: 20px; gap: 10px; }
-    #add-skill-wrap { display: none; }
+    #add-skill-wrap { display: none; justify-content: center; margin-top: 25px; gap: 10px; }
+    .editing #add-skill-wrap { display: flex; }
 
-    /* ── Projects (ENHANCED) ──────────────────────────────────── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
-    }
-    .project-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 25px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: 0.3s;
-    }
+    /* Projects */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; position: relative; display: flex; flex-direction: column; transition: 0.3s; }
     .project-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-    
-    .project-title { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
-    .project-desc { font-size: 0.92rem; color: var(--text); margin-bottom: 15px; flex-grow: 1; }
-    
-    .tech-stack-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: bold; margin-bottom: 8px; }
-    .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .project-tag { background: rgba(108,99,255,0.1); color: var(--accent); padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; border: 1px solid var(--border); }
-
-    .remove-project-btn { position: absolute; top: 10px; right: 10px; background: var(--accent2); color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; display: none; }
+    .p-title { font-size: 1.3rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+    .p-desc { font-size: 0.95rem; margin-bottom: 15px; flex-grow: 1; }
+    .p-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .p-tag { font-size: 0.75rem; background: rgba(108,99,255,0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--accent); }
+    .remove-project-btn { position: absolute; top: 10px; right: 10px; background: var(--accent2); color: #fff; border: none; padding: 4px 8px; border-radius: 4px; display: none; cursor: pointer; }
     .editing .remove-project-btn { display: block; }
-    
-    .editing #add-project-btn { display: block; margin: 30px auto; }
-    #add-project-btn { display: none; }
+    #add-project-btn { display: none; margin: 40px auto; }
+    .editing #add-project-btn { display: block; }
 
-    /* ── Modal & Others ───────────────────────────────────────── */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); padding: 30px; border-radius: 15px; width: 450px; max-width: 90%; }
     .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: var(--muted); }
-    .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--card); border: 1px solid var(--border); color: white; border-radius: 8px; }
+    .form-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--card); border: 1px solid var(--border); color: #fff; border-radius: 8px; }
     
     [contenteditable="true"] { border-bottom: 2px dashed var(--accent); outline: none; }
-    footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 50px; color: var(--muted); }
+    footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 60px; color: var(--muted); font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
 <div id="edit-bar" class="hidden">
-  ✏️ Chế độ chỉnh sửa đang BẬT. Nhấp vào chữ để sửa, sau đó nhấn: 
-  <button class="btn btn-primary" onclick="savePortfolio()">💾 Lưu lại</button>
-  <button class="btn btn-ghost" onclick="cancelEdit()">✕ Hủy</button>
+  ✏️ Edit Mode is ON. Click text to edit. 
+  <button class="btn btn-primary" onclick="savePortfolio()" style="margin-left:15px">💾 Save Changes</button>
+  <button class="btn btn-ghost" onclick="cancelEdit()">✕ Cancel</button>
 </div>
 
 <nav>
@@ -168,6 +118,7 @@
     <span class="nav-brand">&lt;<span id="nav-name">Portfolio</span>/&gt;</span>
     <ul class="nav-links">
       <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
     </ul>
@@ -178,82 +129,79 @@
 <div class="container">
   <section id="hero">
     <div class="avatar-wrap">
-      <img id="avatar" src="https://via.placeholder.com/150" alt="Avatar" />
+      <img id="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" />
       <button id="avatar-edit-btn" onclick="openAvatarDialog()">📷</button>
       <input id="avatar-file" type="file" style="display:none" onchange="handleAvatarFile(event)" />
     </div>
     <div class="hero-text">
-      <h1 class="hero-name" id="hero-name">Tên Của Bạn</h1>
-      <p class="hero-title" id="hero-title">Vị trí công việc (vd: Web Developer)</p>
-      <p class="hero-bio" id="hero-bio">Đoạn giới thiệu ngắn về bản thân bạn tại đây.</p>
+      <p style="color: var(--accent); font-weight: 600;">Welcome to my world</p>
+      <h1 class="hero-name">Hi, I'm <span id="hero-name">John Doe</span></h1>
+      <p class="hero-title" id="hero-title" style="font-size: 1.5rem; color: var(--muted);">Full Stack Developer</p>
     </div>
   </section>
 
+  <section id="about">
+    <h2 class="section-title" style="text-align: left; margin-bottom: 15px;">About <span>Me</span></h2>
+    <p id="about-text" style="font-size: 1.1rem; color: var(--text);">
+      I am a passionate developer with a strong focus on building high-quality web applications. 
+      I love solving complex problems and learning new technologies. My goal is to create 
+      digital experiences that make life easier for people.
+    </p>
+  </section>
+
   <section id="skills">
-    <h2 style="margin-bottom: 10px;">My <span>Skills</span></h2>
+    <h2 class="section-title">My <span>Skills</span></h2>
     <div class="skills-grid" id="skills-grid"></div>
     <div id="add-skill-wrap">
-      <input id="new-skill-input" type="text" placeholder="Thêm kỹ năng mới..." />
-      <button class="btn btn-primary" onclick="addSkill()">+ Thêm</button>
+      <input id="new-skill-input" type="text" placeholder="Add a skill (e.g. Docker)..." style="padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: #fff;">
+      <button class="btn btn-primary" onclick="addSkill()">+ Add</button>
     </div>
   </section>
 
   <section id="projects">
-    <h2 style="margin-bottom: 20px; text-align: center;">My <span>Projects</span></h2>
+    <h2 class="section-title">Featured <span>Projects</span></h2>
     <div class="projects-grid" id="projects-grid"></div>
-    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">+ Thêm Dự Án Mới</button>
+    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">+ Add New Project</button>
   </section>
 </div>
 
 <footer>
-  <p>© <span id="footer-year"></span> <span id="footer-name">Name</span>. Created with ❤️</p>
+  <p>© <span id="footer-year"></span> <span id="footer-name">Name</span>. Built with passion.</p>
 </footer>
 
 <div class="modal-overlay" id="project-modal">
   <div class="modal">
-    <h3>🚀 Thêm Dự Án</h3>
-    <div class="form-group">
-      <label>Tên dự án</label>
-      <input id="m-title" placeholder="VD: Website Bán Hàng" />
-    </div>
-    <div class="form-group">
-      <label>Mô tả (Dự án làm gì? Giải quyết vấn đề gì?)</label>
-      <textarea id="m-desc" rows="3" placeholder="Mô tả ngắn gọn về chức năng dự án..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Công nghệ sử dụng (Cách nhau bằng dấu phẩy)</label>
-      <input id="m-tags" placeholder="VD: React, Node.js, Firebase" />
-    </div>
-    <div class="form-group">
-      <label>Link Demo (Nếu có)</label>
-      <input id="m-demo" placeholder="https://..." />
-    </div>
-    <div class="modal-actions" style="text-align: right;">
-      <button class="btn btn-ghost" onclick="closeAddProjectModal()">Hủy</button>
-      <button class="btn btn-primary" onclick="addProject()">Xác nhận</button>
+    <h3>🚀 Add New Project</h3>
+    <div class="form-group"><label>Project Title</label><input id="m-title" placeholder="Project name"></div>
+    <div class="form-group"><label>Description (What does it do?)</label><textarea id="m-desc" rows="3" placeholder="Describe your project..."></textarea></div>
+    <div class="form-group"><label>Tech Stack (Comma separated)</label><input id="m-tags" placeholder="React, Node.js, etc."></div>
+    <div class="form-group"><label>Demo Link</label><input id="m-demo" placeholder="https://..."></div>
+    <div style="text-align: right; margin-top: 20px;">
+      <button class="btn btn-ghost" onclick="closeAddProjectModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addProject()">Add Project</button>
     </div>
   </div>
 </div>
 
 <script>
 let data = {
-  name: "Nguyễn Văn A",
-  title: "Frontend Developer",
-  bio: "Tôi là một lập trình viên yêu thích sáng tạo các giao diện web đẹp mắt và hiệu quả.",
+  name: "Your Name",
+  title: "Software Engineer",
+  about: "Write something interesting about yourself here. What drives you? What are you looking for?",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
-  skills: ["HTML", "CSS", "JavaScript", "React", "Git"],
+  skills: ["JavaScript", "Python", "React", "Node.js", "Git", "SQL"],
   projects: [
     {
-      title: "Dự án mẫu 01",
-      desc: "Đây là một ứng dụng quản lý công việc giúp người dùng tối ưu hóa thời gian hằng ngày.",
-      tags: ["React", "CSS Grid", "LocalStorage"],
+      title: "Portfolio Website",
+      desc: "An interactive personal portfolio built with pure HTML, CSS, and JS.",
+      tags: ["HTML", "CSS", "Vanilla JS"],
       demo: "#"
     }
   ]
 };
 
 function init() {
-  const saved = localStorage.getItem("my-portfolio-data");
+  const saved = localStorage.getItem("portfolio-v2");
   if (saved) data = JSON.parse(saved);
   document.getElementById("footer-year").textContent = new Date().getFullYear();
   render();
@@ -264,29 +212,23 @@ function render() {
   document.getElementById("nav-name").textContent = data.name;
   document.getElementById("footer-name").textContent = data.name;
   document.getElementById("hero-title").textContent = data.title;
-  document.getElementById("hero-bio").textContent = data.bio;
+  document.getElementById("about-text").textContent = data.about;
   document.getElementById("avatar").src = data.avatar;
 
-  // Render Skills
   const sGrid = document.getElementById("skills-grid");
   sGrid.innerHTML = data.skills.map((s, i) => `
-    <div class="skill-tag">
-      ${s} <span class="remove-skill" onclick="removeSkill(${i})">✕</span>
-    </div>
+    <div class="skill-tag">${s} <span class="remove-skill" onclick="removeSkill(${i})">✕</span></div>
   `).join('');
 
-  // Render Projects
   const pGrid = document.getElementById("projects-grid");
   pGrid.innerHTML = data.projects.map((p, i) => `
     <div class="project-card">
-      <button class="remove-project-btn" onclick="removeProject(${i})">✕ Xóa</button>
-      <div class="project-title">${p.title}</div>
-      <div class="project-desc">${p.desc}</div>
-      <div class="tech-stack-label">🛠️ Công nghệ:</div>
-      <div class="project-tags">
-        ${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
-      </div>
-      <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="width: fit-content;">Xem Demo</a>
+      <button class="remove-project-btn" onclick="removeProject(${i})">Delete</button>
+      <div class="p-title">${p.title}</div>
+      <div class="p-desc">${p.desc}</div>
+      <div style="font-size: 0.75rem; color: var(--muted); font-weight: bold; margin-top: 10px;">TECH STACK:</div>
+      <div class="p-tags">${p.tags.map(t => `<span class="p-tag">${t}</span>`).join('')}</div>
+      <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="margin-top: 15px; width: fit-content;">View Project</a>
     </div>
   `).join('');
 }
@@ -296,59 +238,42 @@ function toggleEdit() {
   editMode = !editMode;
   document.body.classList.toggle("editing", editMode);
   document.getElementById("edit-bar").classList.toggle("hidden", !editMode);
-  document.getElementById("toggle-edit-btn").textContent = editMode ? "✕ Hủy" : "✏️ Edit";
-  
-  const fields = ["hero-name", "hero-title", "hero-bio"];
-  fields.forEach(id => document.getElementById(id).contentEditable = editMode);
+  document.getElementById("toggle-edit-btn").textContent = editMode ? "✕ Close" : "✏️ Edit";
+  ["hero-name", "hero-title", "about-text"].forEach(id => document.getElementById(id).contentEditable = editMode);
 }
 
 function savePortfolio() {
   data.name = document.getElementById("hero-name").textContent;
   data.title = document.getElementById("hero-title").textContent;
-  data.bio = document.getElementById("hero-bio").textContent;
-  localStorage.setItem("my-portfolio-data", JSON.stringify(data));
-  toggleEdit();
-  render();
-  alert("Đã lưu thành công!");
+  data.about = document.getElementById("about-text").textContent;
+  localStorage.setItem("portfolio-v2", JSON.stringify(data));
+  toggleEdit(); render();
 }
 
 function cancelEdit() { location.reload(); }
-
 function addSkill() {
   const input = document.getElementById("new-skill-input");
-  if(input.value) {
-    data.skills.push(input.value);
-    input.value = "";
-    render();
-  }
+  if(input.value) { data.skills.push(input.value); input.value = ""; render(); }
 }
-
 function removeSkill(i) { data.skills.splice(i, 1); render(); }
-
 function openAddProjectModal() { document.getElementById("project-modal").classList.add("open"); }
 function closeAddProjectModal() { document.getElementById("project-modal").classList.remove("open"); }
-
 function addProject() {
   const title = document.getElementById("m-title").value;
   const desc = document.getElementById("m-desc").value;
   const tags = document.getElementById("m-tags").value.split(",").map(t => t.trim());
-  
   if(title && desc) {
     data.projects.push({ title, desc, tags, demo: document.getElementById("m-demo").value || "#" });
-    closeAddProjectModal();
-    render();
+    closeAddProjectModal(); render();
   }
 }
-
 function removeProject(i) { data.projects.splice(i, 1); render(); }
-
 function openAvatarDialog() { document.getElementById("avatar-file").click(); }
 function handleAvatarFile(e) {
   const reader = new FileReader();
   reader.onload = () => { data.avatar = reader.result; render(); };
   reader.readAsDataURL(e.target.files[0]);
 }
-
 init();
 </script>
 </body>
