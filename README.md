@@ -8,7 +8,7 @@ This repository hosts my personal **editable portfolio** website.
 - **Editable intro** — click *Edit* to update your name, title, bio and contact info
 - **Avatar** — upload a photo or paste an image URL
 - **Skills** — add or remove skill tags in one click
-- **Projects** — add/remove project cards with links, tags and descriptions
+- **Projects** — add/remove project cards with role, GitHub link, tech stack tags and descriptions
 - **Auto-save** — all changes are stored in your browser's localStorage
 
 ### 🚀 Usage
