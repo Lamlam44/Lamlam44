@@ -234,6 +234,21 @@
       font-size: .88rem; color: var(--muted); margin-bottom: 14px;
     }
 
+    .project-role {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .78rem; font-weight: 600;
+      color: var(--accent2); background: rgba(245,0,87,.12);
+      border: 1px solid rgba(245,0,87,.3);
+      border-radius: 20px; padding: 3px 10px;
+      margin-bottom: 10px;
+    }
+
+    .project-tags-label {
+      font-size: .72rem; color: var(--muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+
     .project-tags {
       display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
     }
@@ -242,7 +257,7 @@
       color: var(--accent); border-radius: 4px; padding: 2px 8px;
     }
 
-    .project-links { display: flex; gap: 10px; }
+    .project-links { display: flex; gap: 10px; flex-wrap: wrap; }
 
     .remove-project-btn {
       position: absolute; top: 12px; right: 12px;
@@ -432,6 +447,10 @@
       <input id="m-title" placeholder="Project name" />
     </div>
     <div class="form-group">
+      <label>Your Role</label>
+      <input id="m-role" placeholder="e.g. Full-Stack Developer, Frontend Developer" />
+    </div>
+    <div class="form-group">
       <label>Description *</label>
       <textarea id="m-desc" rows="3" placeholder="A short description…"></textarea>
     </div>
@@ -496,26 +515,29 @@ const DEFAULT_DATA = {
     {
       emoji: "🛒",
       title: "E-Commerce App",
+      role:  "Full-Stack Developer",
       desc:  "A full-stack e-commerce platform with cart, payments and admin dashboard.",
       tags:  ["React","Node.js","MongoDB"],
       demo:  "#",
-      source:"#"
+      source:"https://github.com/yourhandle/ecommerce-app"
     },
     {
       emoji: "🌤️",
       title: "Weather Dashboard",
+      role:  "Frontend Developer",
       desc:  "Real-time weather forecasts with beautiful charts powered by OpenWeatherMap.",
-      tags:  ["Vue","Chart.js","API"],
+      tags:  ["Vue","Chart.js","OpenWeatherMap"],
       demo:  "#",
-      source:"#"
+      source:"https://github.com/yourhandle/weather-dashboard"
     },
     {
       emoji: "📝",
       title: "Markdown Blog",
+      role:  "Solo Developer",
       desc:  "A blazing-fast static blog engine that renders Markdown files on the fly.",
       tags:  ["Next.js","MDX","Tailwind"],
       demo:  "#",
-      source:"#"
+      source:"https://github.com/yourhandle/markdown-blog"
     }
   ]
 };
@@ -605,11 +627,13 @@ function renderProjects() {
     card.innerHTML = `
       <div class="project-emoji">${p.emoji || "📁"}</div>
       <div class="project-title">${escHtml(p.title)}</div>
+      ${p.role ? `<div class="project-role">👤 ${escHtml(p.role)}</div>` : ""}
       <div class="project-desc">${escHtml(p.desc)}</div>
+      ${tags ? `<div class="project-tags-label">🛠️ Built with</div>` : ""}
       <div class="project-tags">${tags}</div>
       <div class="project-links">
-        ${p.demo   ? `<a class="btn btn-primary" href="${p.demo}"   target="_blank" rel="noopener">🔗 Demo</a>` : ""}
-        ${p.source ? `<a class="btn btn-ghost"  href="${p.source}" target="_blank" rel="noopener">📂 Code</a>` : ""}
+        ${p.demo   ? `<a class="btn btn-primary" href="${escHtml(p.demo)}"   target="_blank" rel="noopener">🔗 Demo</a>` : ""}
+        ${p.source ? `<a class="btn btn-ghost"  href="${escHtml(p.source)}" target="_blank" rel="noopener">⭐ GitHub</a>` : ""}
       </div>
     `;
     card.prepend(removeBtn);
@@ -718,7 +742,7 @@ document.getElementById("new-skill-input").addEventListener("keydown", e => {
    PROJECTS
 ════════════════════════════════════════════════════════════════ */
 function openAddProjectModal() {
-  ["m-emoji","m-title","m-desc","m-tags","m-demo","m-source"]
+  ["m-emoji","m-title","m-role","m-desc","m-tags","m-demo","m-source"]
     .forEach(id => { document.getElementById(id).value = ""; });
   document.getElementById("project-modal").classList.add("open");
 }
@@ -737,6 +761,7 @@ function addProject() {
   data.projects.push({
     emoji:  document.getElementById("m-emoji").value.trim()  || "📁",
     title,
+    role:   document.getElementById("m-role").value.trim(),
     desc,
     tags,
     demo:   document.getElementById("m-demo").value.trim(),
