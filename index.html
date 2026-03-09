@@ -33,18 +33,8 @@
       padding: 8px 18px; border-radius: 8px; border: none;
       cursor: pointer; font-size: .85rem; font-weight: 600; transition: 0.2s;
     }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
     .btn-ghost:hover { background: rgba(108,99,255,0.1); color: #fff; }
-
-    /* ── Edit Bar ── */
-    #edit-bar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 10px; background: var(--accent); color: #fff;
-      font-size: .85rem; transition: transform 0.3s;
-    }
-    #edit-bar.hidden { transform: translateY(-100%); }
 
     /* ── Nav ── */
     nav {
@@ -57,7 +47,6 @@
     .nav-links { display: flex; gap: 20px; list-style: none; }
     .nav-links a { color: var(--muted); font-size: .9rem; transition: 0.2s; }
     .nav-links a:hover { color: #fff; }
-    #toggle-edit-btn { background: var(--surface); border: 1px solid var(--border); color: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; }
 
     /* ── Sections ── */
     section { padding: 80px 0 40px; }
@@ -66,10 +55,7 @@
 
     /* Hero */
     #hero { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; padding-top: 100px; }
-    .avatar-wrap { position: relative; }
     #avatar { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; box-shadow: 0 0 30px rgba(108,99,255,0.3); }
-    .editing #avatar-edit-btn { display: flex; position: absolute; bottom: 10px; right: 10px; background: var(--accent); border: none; border-radius: 50%; width: 35px; height: 35px; justify-content: center; align-items: center; cursor: pointer; color: white; }
-    #avatar-edit-btn { display: none; }
     .hero-name { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; }
     .hero-name span { color: var(--accent); }
 
@@ -77,14 +63,10 @@
     #about { background: var(--surface); border-radius: var(--radius); padding: 40px; margin-top: 20px; border: 1px solid var(--border); }
     #about-text { font-size: 1.1rem; color: var(--text); line-height: 1.8; }
 
-    /* Skills (CENTERED) */
+    /* Skills */
     .skills-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
     .skill-tag { background: var(--card); border: 1px solid var(--border); padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 10px; font-weight: 600; transition: 0.3s; }
     .skill-tag:hover { border-color: var(--accent); transform: translateY(-3px); background: rgba(108,99,255,0.1); }
-    .remove-skill { color: var(--accent2); cursor: pointer; display: none; font-weight: bold; }
-    .editing .remove-skill { display: inline; }
-    #add-skill-wrap { display: none; justify-content: center; margin-top: 30px; gap: 10px; }
-    .editing #add-skill-wrap { display: flex; }
 
     /* Projects */
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
@@ -95,31 +77,11 @@
     .p-tags-label { font-size: 0.75rem; color: var(--muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
     .p-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
     .p-tag { font-size: 0.75rem; background: rgba(108,99,255,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); color: var(--accent); }
-    .remove-project-btn { position: absolute; top: 15px; right: 15px; background: var(--accent2); color: #fff; border: none; padding: 5px 10px; border-radius: 6px; display: none; cursor: pointer; font-size: 0.7rem; }
-    .editing .remove-project-btn { display: block; }
-    #add-project-btn { display: none; margin: 40px auto; }
-    .editing #add-project-btn { display: block; }
 
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); padding: 35px; border-radius: 20px; width: 500px; max-width: 90%; border: 1px solid var(--border); }
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 12px; background: var(--card); border: 1px solid var(--border); color: #fff; border-radius: 10px; font-family: inherit; }
-    .form-group input:focus { outline: none; border-color: var(--accent); }
-    
-    [contenteditable="true"] { border-bottom: 2px dashed var(--accent); outline: none; padding: 2px 5px; }
     footer { text-align: center; padding: 50px; border-top: 1px solid var(--border); margin-top: 60px; color: var(--muted); font-size: 0.9rem; }
   </style>
 </head>
 <body>
-
-<div id="edit-bar" class="hidden">
-  ✏️ <strong>Edit Mode Active</strong> - Click text to edit directly.
-  <button class="btn btn-primary" onclick="savePortfolio()" style="margin-left:15px">💾 Save Portfolio</button>
-  <button class="btn btn-ghost" onclick="cancelEdit()" style="color:white">✕ Cancel</button>
-</div>
 
 <nav>
   <div class="container">
@@ -130,16 +92,13 @@
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
     </ul>
-    <button id="toggle-edit-btn" onclick="toggleEdit()">✏️ Edit</button>
   </div>
 </nav>
 
 <div class="container">
   <section id="hero">
     <div class="avatar-wrap">
-      <img id="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lâm" alt="Trương Thành Lâm" />
-      <button id="avatar-edit-btn" onclick="openAvatarDialog()">📷</button>
-      <input id="avatar-file" type="file" style="display:none" onchange="handleAvatarFile(event)" />
+      <img id="avatar" src="https://i.postimg.cc/W1H8Lw8h/z7603130479718_f720465194abab7eb5ef2427e250938f.jpg" alt="Trương Thành Lâm" />
     </div>
     <div class="hero-text">
       <p style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Full-stack Developer</p>
@@ -150,7 +109,7 @@
 
   <section id="about">
     <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">About <span>Me</span></h2>
-    <p id="about-text" contenteditable="false">
+    <p id="about-text">
       Full-stack Developer with a solid foundation in Java and the Spring ecosystem. I specialize in building robust backend services and seamless user interfaces using React. Passionate about writing clean, maintainable code and developing scalable web applications that solve real-world problems.
     </p>
   </section>
@@ -158,16 +117,11 @@
   <section id="skills">
     <h2 class="section-title">My <span>Skills</span></h2>
     <div class="skills-grid" id="skills-grid"></div>
-    <div id="add-skill-wrap">
-      <input id="new-skill-input" type="text" placeholder="Add skill (e.g. Docker)...">
-      <button class="btn btn-primary" onclick="addSkill()">+ Add</button>
-    </div>
   </section>
 
   <section id="projects">
     <h2 class="section-title">Featured <span>Projects</span></h2>
     <div class="projects-grid" id="projects-grid"></div>
-    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">+ Add New Project</button>
   </section>
 </div>
 
@@ -175,27 +129,13 @@
   <p>© <span id="footer-year"></span> <span id="footer-name">Trương Thành Lâm</span>. Built with Passion & Caffeine.</p>
 </footer>
 
-<div class="modal-overlay" id="project-modal">
-  <div class="modal">
-    <h3>🚀 Add New Project</h3>
-    <div class="form-group"><label>Project Title</label><input id="m-title" placeholder="e.g. Tour Management System"></div>
-    <div class="form-group"><label>Description</label><textarea id="m-desc" rows="3" placeholder="What does this project do?"></textarea></div>
-    <div class="form-group"><label>Tech Stack (Comma separated)</label><input id="m-tags" placeholder="React, Spring Boot, MySQL"></div>
-    <div class="form-group"><label>GitHub Repo URL</label><input id="m-demo" placeholder="https://github.com/..."></div>
-    <div style="text-align: right; margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
-      <button class="btn btn-ghost" onclick="closeAddProjectModal()" style="color:white">Cancel</button>
-      <button class="btn btn-primary" onclick="addProject()">Confirm</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// INITIAL DATA
-let data = {
+// STATIC DATA
+const data = {
   name: "Trương Thành Lâm",
   title: "Full-stack Developer | Java & React",
   about: "Full-stack Developer with a solid foundation in Java and the Spring ecosystem. I specialize in building robust backend services and seamless user interfaces using React. Passionate about writing clean, maintainable code and developing scalable web applications that solve real-world problems.",
-  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lâm",
+  avatar: "https://i.postimg.cc/W1H8Lw8h/z7603130479718_f720465194abab7eb5ef2427e250938f.jpg",
   skills: ["React", "Git", "MySQL", "Java Core", "Spring Boot", "JavaScript", "TypeScript"],
   projects: [
     {
@@ -214,8 +154,6 @@ let data = {
 };
 
 function init() {
-  const saved = localStorage.getItem("lam-portfolio-v1");
-  if (saved) data = JSON.parse(saved);
   document.getElementById("footer-year").textContent = new Date().getFullYear();
   render();
 }
@@ -229,14 +167,13 @@ function render() {
   document.getElementById("avatar").src = data.avatar;
 
   const sGrid = document.getElementById("skills-grid");
-  sGrid.innerHTML = data.skills.map((s, i) => `
-    <div class="skill-tag">${s} <span class="remove-skill" onclick="removeSkill(${i})">✕</span></div>
+  sGrid.innerHTML = data.skills.map(s => `
+    <div class="skill-tag">${s}</div>
   `).join('');
 
   const pGrid = document.getElementById("projects-grid");
-  pGrid.innerHTML = data.projects.map((p, i) => `
+  pGrid.innerHTML = data.projects.map(p => `
     <div class="project-card">
-      <button class="remove-project-btn" onclick="removeProject(${i})">Delete</button>
       <div class="p-title">${p.title}</div>
       <div class="p-desc">${p.desc}</div>
       <div class="p-tags-label">Tech Stack:</div>
@@ -244,54 +181,6 @@ function render() {
       <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="margin-top: 15px; width: fit-content; border-color: var(--accent); color: var(--accent);">View Project</a>
     </div>
   `).join('');
-}
-
-let editMode = false;
-function toggleEdit() {
-  editMode = !editMode;
-  document.body.classList.toggle("editing", editMode);
-  document.getElementById("edit-bar").classList.toggle("hidden", !editMode);
-  document.getElementById("toggle-edit-btn").textContent = editMode ? "✕ Close" : "✏️ Edit";
-  ["hero-name", "hero-title", "about-text"].forEach(id => document.getElementById(id).contentEditable = editMode);
-}
-
-function savePortfolio() {
-  data.name = document.getElementById("hero-name").textContent;
-  data.title = document.getElementById("hero-title").textContent;
-  data.about = document.getElementById("about-text").textContent;
-  localStorage.setItem("lam-portfolio-v1", JSON.stringify(data));
-  toggleEdit(); render();
-  alert("Portfolio Updated Successfully!");
-}
-
-function cancelEdit() { location.reload(); }
-
-function addSkill() {
-  const input = document.getElementById("new-skill-input");
-  if(input.value) { data.skills.push(input.value); input.value = ""; render(); }
-}
-function removeSkill(i) { data.skills.splice(i, 1); render(); }
-
-function openAddProjectModal() { document.getElementById("project-modal").classList.add("open"); }
-function closeAddProjectModal() { document.getElementById("project-modal").classList.remove("open"); }
-
-function addProject() {
-  const title = document.getElementById("m-title").value;
-  const desc = document.getElementById("m-desc").value;
-  const tags = document.getElementById("m-tags").value.split(",").map(t => t.trim());
-  const demo = document.getElementById("m-demo").value;
-  if(title && desc) {
-    data.projects.push({ title, desc, tags, demo: demo || "#" });
-    closeAddProjectModal(); render();
-  }
-}
-function removeProject(i) { data.projects.splice(i, 1); render(); }
-
-function openAvatarDialog() { document.getElementById("avatar-file").click(); }
-function handleAvatarFile(e) {
-  const reader = new FileReader();
-  reader.onload = () => { data.avatar = reader.result; render(); };
-  reader.readAsDataURL(e.target.files[0]);
 }
 
 init();
