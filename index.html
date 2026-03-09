@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:  #6c63ff;
+      --accent2: #f50057;
+      --bg:      #0f0f1a;
+      --surface: #1a1a2e;
+      --card:    #16213e;
+      --text:    #e0e0f0;
+      --muted:   #8888aa;
+      --border:  rgba(108,99,255,.35);
+      --radius:  12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Utility ──────────────────────────────────────────────── */
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: .85rem; font-weight: 600;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-danger  { background: var(--accent2); color: #fff; }
+    .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+
+    /* ── Edit-mode overlay hint ───────────────────────────────── */
+    #edit-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 10px 20px;
+      background: rgba(108,99,255,.92);
+      font-size: .85rem; font-weight: 600; color: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,.4);
+      transition: transform .3s;
+    }
+    #edit-bar.hidden { transform: translateY(-100%); }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,15,26,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-brand { font-weight: 800; font-size: 1.1rem; color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { color: var(--muted); font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    #toggle-edit-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 16px; border-radius: 8px;
+      cursor: pointer; font-size: .82rem; font-weight: 600;
+      transition: background .2s;
+    }
+    #toggle-edit-btn:hover { background: var(--accent); }
+
+    /* ── Hero / Intro ─────────────────────────────────────────── */
+    #hero {
+      padding: 100px 0 70px;
+      display: flex; align-items: center; gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    /* Avatar */
+    .avatar-wrap {
+      position: relative; flex-shrink: 0;
+    }
+    .avatar-wrap img#avatar {
+      width: 180px; height: 180px; object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--accent);
+      box-shadow: 0 0 40px rgba(108,99,255,.45);
+      display: block;
+    }
+    #avatar-edit-btn {
+      position: absolute; bottom: 6px; right: 6px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 50%;
+      width: 32px; height: 32px;
+      cursor: pointer; font-size: .95rem;
+      display: none; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.4);
+    }
+    .editing #avatar-edit-btn { display: flex; }
+
+    .hero-text { flex: 1; min-width: 260px; }
+
+    .hero-greeting {
+      font-size: .95rem; color: var(--accent);
+      font-weight: 600; letter-spacing: .5px;
+      margin-bottom: 8px;
+    }
+
+    .hero-name {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800; line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-name span { color: var(--accent); }
+
+    .hero-title {
+      font-size: 1.15rem; color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .hero-bio {
+      font-size: .97rem; color: var(--text);
+      max-width: 520px; margin-bottom: 28px;
+    }
+
+    .hero-contacts {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .contact-item {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .85rem; color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 14px;
+    }
+
+    /* ── Section common ───────────────────────────────────────── */
+    section { padding: 70px 0; }
+    .section-title {
+      font-size: 1.6rem; font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .section-title span { color: var(--accent); }
+    .section-sub {
+      color: var(--muted); font-size: .92rem;
+      margin-bottom: 36px;
+    }
+    .divider {
+      width: 50px; height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px; margin-bottom: 14px;
+    }
+
+    /* ── Skills ───────────────────────────────────────────────── */
+    #skills { background: var(--surface); border-radius: var(--radius); }
+
+    .skills-grid {
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+
+    .skill-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 16px;
+      font-size: .88rem; font-weight: 600;
+      transition: border-color .2s, background .2s;
+    }
+    .skill-tag:hover { border-color: var(--accent); background: rgba(108,99,255,.15); }
+
+    .skill-tag .remove-skill {
+      background: none; border: none; color: var(--accent2);
+      cursor: pointer; font-size: 1rem; line-height: 1;
+      display: none; padding: 0;
+    }
+    .editing .skill-tag .remove-skill { display: inline; }
+
+    #add-skill-wrap {
+      display: none; margin-top: 16px;
+      gap: 8px; align-items: center;
+    }
+    .editing #add-skill-wrap { display: flex; }
+
+    #new-skill-input {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 14px;
+      color: var(--text); font-size: .88rem; width: 200px;
+    }
+    #new-skill-input:focus { outline: none; border-color: var(--accent); }
+
+    /* ── Projects ─────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(108,99,255,.2);
+    }
+
+    .project-emoji { font-size: 1.8rem; margin-bottom: 12px; }
+
+    .project-title {
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: .88rem; color: var(--muted); margin-bottom: 14px;
+    }
+
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
+    }
+    .project-tag {
+      font-size: .75rem; background: rgba(108,99,255,.18);
+      color: var(--accent); border-radius: 4px; padding: 2px 8px;
+    }
+
+    .project-links { display: flex; gap: 10px; }
+
+    .remove-project-btn {
+      position: absolute; top: 12px; right: 12px;
+      background: var(--accent2); color: #fff;
+      border: none; border-radius: 6px;
+      padding: 3px 8px; font-size: .75rem;
+      cursor: pointer; display: none;
+    }
+    .editing .remove-project-btn { display: block; }
+
+    #add-project-btn { display: none; margin-top: 24px; }
+    .editing #add-project-btn { display: inline-flex; }
+
+    /* ── Add-project modal ────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px; width: min(480px, 92vw);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal h3 { font-size: 1.2rem; margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: 5px; }
+    .form-group input, .form-group textarea {
+      width: 100%; background: var(--card);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 12px; color: var(--text); font-size: .9rem;
+      resize: vertical;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ── Inline editable ──────────────────────────────────────── */
+    [contenteditable="true"] {
+      outline: none;
+      border-bottom: 2px dashed var(--accent);
+      border-radius: 2px; padding: 2px 4px;
+      cursor: text; transition: background .2s;
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(108,99,255,.12);
+    }
+    [contenteditable="true"]:hover { background: rgba(108,99,255,.08); }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 30px;
+      color: var(--muted); font-size: .82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      #hero { flex-direction: column; text-align: center; padding: 80px 0 50px; }
+      .hero-contacts { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Edit-mode bar ──────────────────────────────────────────── -->
+<div id="edit-bar" class="hidden">
+  ✏️ Edit mode is ON — click any text to edit it, then press
+  <kbd style="background:rgba(255,255,255,.2);border-radius:4px;padding:1px 6px">Save</kbd>
+  when done.
+  <button class="btn btn-primary" id="save-btn" onclick="savePortfolio()">💾 Save</button>
+  <button class="btn btn-ghost" id="cancel-btn" onclick="cancelEdit()">✕ Cancel</button>
+</div>
+
+<!-- ── Navigation ────────────────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="container">
+    <span class="nav-brand">&#60;<span id="nav-name">Portfolio</span>/&#62;</span>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="toggle-edit-btn" onclick="toggleEdit()">✏️ Edit</button>
+  </div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────── -->
+<div class="container">
+  <section id="hero">
+
+    <!-- Avatar -->
+    <div class="avatar-wrap">
+      <img id="avatar" src="" alt="Profile photo" />
+      <button id="avatar-edit-btn" title="Change avatar" onclick="openAvatarDialog()">📷</button>
+      <input id="avatar-file" type="file" accept="image/*" style="display:none" onchange="handleAvatarFile(event)" />
+    </div>
+
+    <!-- Text -->
+    <div class="hero-text">
+      <p class="hero-greeting">👋 Hello, I'm</p>
+      <h1 class="hero-name">
+        <span id="hero-name">Your Name</span>
+      </h1>
+      <p class="hero-title" id="hero-title">Full-Stack Developer &amp; Designer</p>
+      <p class="hero-bio" id="hero-bio">
+        Passionate about building beautiful, accessible, and high-performance web experiences.
+        I love turning ideas into elegant digital products.
+      </p>
+      <div class="hero-contacts" id="hero-contacts-wrap">
+        <span class="contact-item">📧 <span id="contact-email">hello@example.com</span></span>
+        <span class="contact-item">🌍 <span id="contact-location">City, Country</span></span>
+        <span class="contact-item">🔗 <span id="contact-github">github.com/yourhandle</span></span>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<!-- ── Skills ────────────────────────────────────────────────── -->
+<div class="container">
+  <section id="skills">
+    <div class="divider"></div>
+    <h2 class="section-title">My <span>Skills</span></h2>
+    <p class="section-sub" id="skills-sub">Technologies &amp; tools I work with</p>
+
+    <div class="skills-grid" id="skills-grid"></div>
+
+    <!-- add skill row (visible in edit mode) -->
+    <div id="add-skill-wrap">
+      <input id="new-skill-input" type="text" placeholder="New skill (e.g. Docker)" />
+      <button class="btn btn-primary" onclick="addSkill()">+ Add</button>
+    </div>
+  </section>
+</div>
+
+<!-- ── Projects ───────────────────────────────────────────────── -->
+<div class="container">
+  <section id="projects">
+    <div class="divider"></div>
+    <h2 class="section-title">My <span>Projects</span></h2>
+    <p class="section-sub" id="projects-sub">Things I've built</p>
+
+    <div class="projects-grid" id="projects-grid"></div>
+
+    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">
+      + Add Project
+    </button>
+  </section>
+</div>
+
+<!-- ── Contact ────────────────────────────────────────────────── -->
+<div class="container">
+  <section id="contact">
+    <div class="divider"></div>
+    <h2 class="section-title">Get In <span>Touch</span></h2>
+    <p class="section-sub">Have a project in mind? Let's talk.</p>
+    <p id="contact-msg" style="max-width:500px;color:var(--muted);">
+      I'm open to freelance opportunities, collaborations and full-time roles.
+      Feel free to reach out anytime — I usually respond within 24 hours.
+    </p>
+  </section>
+</div>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <p>© <span id="footer-year"></span> <span id="footer-name">Your Name</span>. Built with ❤️ and pure HTML.</p>
+</footer>
+
+<!-- ── Add-project modal ──────────────────────────────────────── -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <h3>➕ Add New Project</h3>
+    <div class="form-group">
+      <label>Emoji / Icon</label>
+      <input id="m-emoji" placeholder="🚀" maxlength="4" />
+    </div>
+    <div class="form-group">
+      <label>Title *</label>
+      <input id="m-title" placeholder="Project name" />
+    </div>
+    <div class="form-group">
+      <label>Description *</label>
+      <textarea id="m-desc" rows="3" placeholder="A short description…"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Tags (comma-separated)</label>
+      <input id="m-tags" placeholder="React, Node.js, MongoDB" />
+    </div>
+    <div class="form-group">
+      <label>Live Demo URL</label>
+      <input id="m-demo" placeholder="https://…" />
+    </div>
+    <div class="form-group">
+      <label>Source Code URL</label>
+      <input id="m-source" placeholder="https://github.com/…" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeAddProjectModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addProject()">Add Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Avatar URL modal ───────────────────────────────────────── -->
+<div class="modal-overlay" id="avatar-modal">
+  <div class="modal">
+    <h3>🖼️ Change Avatar</h3>
+    <div class="form-group">
+      <label>Upload from device</label>
+      <button class="btn btn-ghost" onclick="document.getElementById('avatar-file').click()">
+        📁 Choose file
+      </button>
+    </div>
+    <div class="form-group">
+      <label>— or paste image URL —</label>
+      <input id="avatar-url-input" placeholder="https://…/photo.jpg" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeAvatarModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="applyAvatarUrl()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DATA — default state
+════════════════════════════════════════════════════════════════ */
+const DEFAULT_DATA = {
+  name:     "Your Name",
+  title:    "Full-Stack Developer & Designer",
+  bio:      "Passionate about building beautiful, accessible, and high-performance web experiences. I love turning ideas into elegant digital products.",
+  email:    "hello@example.com",
+  location: "City, Country",
+  github:   "github.com/yourhandle",
+  contactMsg: "I'm open to freelance opportunities, collaborations and full-time roles. Feel free to reach out anytime — I usually respond within 24 hours.",
+  avatar:   "https://api.dicebear.com/8.x/bottts-neutral/svg?seed=Portfolio",
+  skills: [
+    "HTML5", "CSS3", "JavaScript", "TypeScript",
+    "React", "Node.js", "Python", "Git"
+  ],
+  projects: [
+    {
+      emoji: "🛒",
+      title: "E-Commerce App",
+      desc:  "A full-stack e-commerce platform with cart, payments and admin dashboard.",
+      tags:  ["React","Node.js","MongoDB"],
+      demo:  "#",
+      source:"#"
+    },
+    {
+      emoji: "🌤️",
+      title: "Weather Dashboard",
+      desc:  "Real-time weather forecasts with beautiful charts powered by OpenWeatherMap.",
+      tags:  ["Vue","Chart.js","API"],
+      demo:  "#",
+      source:"#"
+    },
+    {
+      emoji: "📝",
+      title: "Markdown Blog",
+      desc:  "A blazing-fast static blog engine that renders Markdown files on the fly.",
+      tags:  ["Next.js","MDX","Tailwind"],
+      demo:  "#",
+      source:"#"
+    }
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════════════ */
+let data   = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let editMode = false;
+let snapshot = null; // copy before edit, for cancel
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════════════════════════ */
+(function init() {
+  const saved = localStorage.getItem("portfolio-data");
+  if (saved) {
+    try { data = JSON.parse(saved); } catch(e) { /* use default */ }
+  }
+  document.getElementById("footer-year").textContent = new Date().getFullYear();
+  render();
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER — push data → DOM
+════════════════════════════════════════════════════════════════ */
+function render() {
+  setText("hero-name",       data.name);
+  setText("nav-name",        data.name);
+  setText("footer-name",     data.name);
+  setText("hero-title",      data.title);
+  setText("hero-bio",        data.bio);
+  setText("contact-email",   data.email);
+  setText("contact-location",data.location);
+  setText("contact-github",  data.github);
+  setText("contact-msg",     data.contactMsg);
+
+  const avatar = document.getElementById("avatar");
+  avatar.src = data.avatar || DEFAULT_DATA.avatar;
+
+  renderSkills();
+  renderProjects();
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function renderSkills() {
+  const grid = document.getElementById("skills-grid");
+  grid.innerHTML = "";
+  data.skills.forEach((skill, i) => {
+    const tag = document.createElement("span");
+    tag.className = "skill-tag";
+
+    const label = document.createElement("span");
+    label.textContent = skill;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-skill";
+    removeBtn.textContent = "✕";
+    removeBtn.title = "Remove";
+    removeBtn.onclick = () => { const idx = data.skills.indexOf(skill); if (idx !== -1) { data.skills.splice(idx, 1); renderSkills(); } };
+
+    tag.appendChild(label);
+    tag.appendChild(removeBtn);
+    grid.appendChild(tag);
+  });
+}
+
+function renderProjects() {
+  const grid = document.getElementById("projects-grid");
+  grid.innerHTML = "";
+  data.projects.forEach((p, i) => {
+    const card = document.createElement("div");
+    card.className = "project-card";
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-project-btn";
+    removeBtn.textContent = "✕ Remove";
+    removeBtn.onclick = () => { const idx = data.projects.indexOf(p); if (idx !== -1) { data.projects.splice(idx, 1); renderProjects(); } };
+
+    const tags = (p.tags || []).map(t =>
+      `<span class="project-tag">${escHtml(t)}</span>`).join("");
+
+    card.innerHTML = `
+      <div class="project-emoji">${p.emoji || "📁"}</div>
+      <div class="project-title">${escHtml(p.title)}</div>
+      <div class="project-desc">${escHtml(p.desc)}</div>
+      <div class="project-tags">${tags}</div>
+      <div class="project-links">
+        ${p.demo   ? `<a class="btn btn-primary" href="${p.demo}"   target="_blank" rel="noopener">🔗 Demo</a>` : ""}
+        ${p.source ? `<a class="btn btn-ghost"  href="${p.source}" target="_blank" rel="noopener">📂 Code</a>` : ""}
+      </div>
+    `;
+    card.prepend(removeBtn);
+    grid.appendChild(card);
+  });
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EDIT MODE
+════════════════════════════════════════════════════════════════ */
+const EDITABLE_IDS = [
+  "hero-name","hero-title","hero-bio",
+  "contact-email","contact-location","contact-github",
+  "contact-msg"
+];
+
+function toggleEdit() {
+  editMode ? cancelEdit() : enterEdit();
+}
+
+function enterEdit() {
+  editMode = true;
+  snapshot = JSON.parse(JSON.stringify(data));
+
+  document.body.classList.add("editing");
+  document.getElementById("edit-bar").classList.remove("hidden");
+  document.getElementById("toggle-edit-btn").textContent = "✕ Cancel";
+
+  EDITABLE_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.contentEditable = "true";
+  });
+}
+
+function cancelEdit() {
+  editMode = false;
+  data = JSON.parse(JSON.stringify(snapshot));
+
+  document.body.classList.remove("editing");
+  document.getElementById("edit-bar").classList.add("hidden");
+  document.getElementById("toggle-edit-btn").textContent = "✏️ Edit";
+
+  EDITABLE_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.contentEditable = "false";
+  });
+
+  render(); // restore
+}
+
+function savePortfolio() {
+  // harvest text from editable elements
+  data.name         = getText("hero-name");
+  data.title        = getText("hero-title");
+  data.bio          = getText("hero-bio");
+  data.email        = getText("contact-email");
+  data.location     = getText("contact-location");
+  data.github       = getText("contact-github");
+  data.contactMsg   = getText("contact-msg");
+
+  localStorage.setItem("portfolio-data", JSON.stringify(data));
+
+  editMode = false;
+  document.body.classList.remove("editing");
+  document.getElementById("edit-bar").classList.add("hidden");
+  document.getElementById("toggle-edit-btn").textContent = "✏️ Edit";
+
+  EDITABLE_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.contentEditable = "false";
+  });
+
+  render();
+  showToast("✅ Portfolio saved!");
+}
+
+function getText(id) {
+  const el = document.getElementById(id);
+  return el ? el.textContent.trim() : "";
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILLS
+════════════════════════════════════════════════════════════════ */
+function addSkill() {
+  const input = document.getElementById("new-skill-input");
+  const val   = input.value.trim();
+  if (!val) return;
+  if (data.skills.includes(val)) { showToast("Skill already added!"); return; }
+  data.skills.push(val);
+  input.value = "";
+  renderSkills();
+}
+
+document.getElementById("new-skill-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") addSkill();
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   PROJECTS
+════════════════════════════════════════════════════════════════ */
+function openAddProjectModal() {
+  ["m-emoji","m-title","m-desc","m-tags","m-demo","m-source"]
+    .forEach(id => { document.getElementById(id).value = ""; });
+  document.getElementById("project-modal").classList.add("open");
+}
+function closeAddProjectModal() {
+  document.getElementById("project-modal").classList.remove("open");
+}
+
+function addProject() {
+  const title = document.getElementById("m-title").value.trim();
+  const desc  = document.getElementById("m-desc").value.trim();
+  if (!title || !desc) { showToast("Title and description are required."); return; }
+
+  const rawTags = document.getElementById("m-tags").value;
+  const tags = rawTags.split(",").map(t => t.trim()).filter(Boolean);
+
+  data.projects.push({
+    emoji:  document.getElementById("m-emoji").value.trim()  || "📁",
+    title,
+    desc,
+    tags,
+    demo:   document.getElementById("m-demo").value.trim(),
+    source: document.getElementById("m-source").value.trim()
+  });
+
+  renderProjects();
+  closeAddProjectModal();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AVATAR
+════════════════════════════════════════════════════════════════ */
+function openAvatarDialog() {
+  document.getElementById("avatar-url-input").value = "";
+  document.getElementById("avatar-modal").classList.add("open");
+}
+function closeAvatarModal() {
+  document.getElementById("avatar-modal").classList.remove("open");
+}
+
+function applyAvatarUrl() {
+  const url = document.getElementById("avatar-url-input").value.trim();
+  if (!url) { showToast("Please enter a URL."); return; }
+  data.avatar = url;
+  document.getElementById("avatar").src = url;
+  closeAvatarModal();
+}
+
+function handleAvatarFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    data.avatar = ev.target.result;
+    document.getElementById("avatar").src = ev.target.result;
+    closeAvatarModal();
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.createElement("div");
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position:"fixed", bottom:"24px", right:"24px", zIndex:"9999",
+    background:"var(--accent)", color:"#fff",
+    padding:"10px 20px", borderRadius:"8px",
+    fontSize:".88rem", fontWeight:"600",
+    boxShadow:"0 4px 20px rgba(0,0,0,.4)",
+    transition:"opacity .4s"
+  });
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = "0"; }, 2400);
+  setTimeout(() => t.remove(), 2800);
+}
+
+/* close modals on overlay click */
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) overlay.classList.remove("open");
+  });
+});
+</script>
+</body>
+</html>
