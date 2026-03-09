@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Portfolio</title>
+  <title>My Portfolio | LamLam44</title>
   <style>
     /* ── Reset & Base ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,7 +15,7 @@
       --surface: #1a1a2e;
       --card:    #16213e;
       --text:    #e0e0f0;
-      --muted:   #8888aa;
+      --muted:    #8888aa;
       --border:  rgba(108,99,255,.35);
       --radius:  12px;
     }
@@ -44,10 +44,9 @@
     }
     .btn:hover { opacity: .85; transform: translateY(-1px); }
     .btn-primary { background: var(--accent); color: #fff; }
-    .btn-danger  { background: var(--accent2); color: #fff; }
     .btn-ghost   { background: transparent; color: var(--muted); border: 1px solid var(--border); }
 
-    /* ── Edit-mode overlay hint ───────────────────────────────── */
+    /* ── Edit-mode overlay ────────────────────────────────────── */
     #edit-bar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 999;
       display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -71,763 +70,286 @@
       height: 60px;
     }
     .nav-brand { font-weight: 800; font-size: 1.1rem; color: var(--accent); }
-    .nav-links { display: flex; gap: 24px; list-style: none; }
-    .nav-links a { color: var(--muted); font-size: .9rem; transition: color .2s; }
-    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { color: var(--muted); font-size: .9rem; }
     #toggle-edit-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 7px 16px; border-radius: 8px;
-      cursor: pointer; font-size: .82rem; font-weight: 600;
-      transition: background .2s;
-    }
-    #toggle-edit-btn:hover { background: var(--accent); }
-
-    /* ── Hero / Intro ─────────────────────────────────────────── */
-    #hero {
-      padding: 100px 0 70px;
-      display: flex; align-items: center; gap: 60px;
-      flex-wrap: wrap;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); padding: 7px 16px; border-radius: 8px; cursor: pointer;
     }
 
-    /* Avatar */
-    .avatar-wrap {
-      position: relative; flex-shrink: 0;
-    }
+    /* ── Hero ─────────────────────────────────────────────────── */
+    #hero { padding: 80px 0 50px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .avatar-wrap { position: relative; flex-shrink: 0; }
     .avatar-wrap img#avatar {
-      width: 180px; height: 180px; object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid var(--accent);
-      box-shadow: 0 0 40px rgba(108,99,255,.45);
-      display: block;
+      width: 160px; height: 160px; border-radius: 50%;
+      border: 4px solid var(--accent); object-fit: cover;
     }
-    #avatar-edit-btn {
-      position: absolute; bottom: 6px; right: 6px;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      cursor: pointer; font-size: .95rem;
-      display: none; align-items: center; justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,.4);
-    }
-    .editing #avatar-edit-btn { display: flex; }
+    .editing #avatar-edit-btn { display: flex; position: absolute; bottom: 5px; right: 5px; background: var(--accent); border: none; border-radius: 50%; width: 35px; height: 35px; justify-content: center; align-items: center; cursor: pointer;}
+    #avatar-edit-btn { display: none; }
 
-    .hero-text { flex: 1; min-width: 260px; }
-
-    .hero-greeting {
-      font-size: .95rem; color: var(--accent);
-      font-weight: 600; letter-spacing: .5px;
-      margin-bottom: 8px;
-    }
-
-    .hero-name {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 800; line-height: 1.1;
-      margin-bottom: 12px;
-    }
-    .hero-name span { color: var(--accent); }
-
-    .hero-title {
-      font-size: 1.15rem; color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    .hero-bio {
-      font-size: .97rem; color: var(--text);
-      max-width: 520px; margin-bottom: 28px;
-    }
-
-    .hero-contacts {
-      display: flex; gap: 12px; flex-wrap: wrap;
-    }
-    .contact-item {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: .85rem; color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px; padding: 5px 14px;
-    }
-
-    /* ── Section common ───────────────────────────────────────── */
-    section { padding: 70px 0; }
-    .section-title {
-      font-size: 1.6rem; font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .section-title span { color: var(--accent); }
-    .section-sub {
-      color: var(--muted); font-size: .92rem;
-      margin-bottom: 36px;
-    }
-    .divider {
-      width: 50px; height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 2px; margin-bottom: 14px;
-    }
-
-    /* ── Skills ───────────────────────────────────────────────── */
-    #skills { background: var(--surface); border-radius: var(--radius); }
-
+    /* ── Skills (FIXED: CENTERED) ────────────────────────────── */
+    #skills { text-align: center; }
     .skills-grid {
-      display: flex; flex-wrap: wrap; gap: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center; /* Đưa các thẻ skill ra giữa */
+      margin-top: 20px;
     }
-
     .skill-tag {
-      display: inline-flex; align-items: center; gap: 6px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px 16px;
-      font-size: .88rem; font-weight: 600;
-      transition: border-color .2s, background .2s;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .skill-tag:hover { border-color: var(--accent); background: rgba(108,99,255,.15); }
+    .remove-skill { color: var(--accent2); cursor: pointer; display: none; margin-left: 5px; font-weight: bold; }
+    .editing .remove-skill { display: inline; }
+    
+    .editing #add-skill-wrap { display: flex; justify-content: center; margin-top: 20px; gap: 10px; }
+    #add-skill-wrap { display: none; }
 
-    .skill-tag .remove-skill {
-      background: none; border: none; color: var(--accent2);
-      cursor: pointer; font-size: 1rem; line-height: 1;
-      display: none; padding: 0;
-    }
-    .editing .skill-tag .remove-skill { display: inline; }
-
-    #add-skill-wrap {
-      display: none; margin-top: 16px;
-      gap: 8px; align-items: center;
-    }
-    .editing #add-skill-wrap { display: flex; }
-
-    #new-skill-input {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px 14px;
-      color: var(--text); font-size: .88rem; width: 200px;
-    }
-    #new-skill-input:focus { outline: none; border-color: var(--accent); }
-
-    /* ── Projects ─────────────────────────────────────────────── */
+    /* ── Projects (ENHANCED) ──────────────────────────────────── */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
     }
-
     .project-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: 25px;
       position: relative;
-      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+      transition: 0.3s;
     }
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(108,99,255,.2);
-    }
+    .project-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+    
+    .project-title { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+    .project-desc { font-size: 0.92rem; color: var(--text); margin-bottom: 15px; flex-grow: 1; }
+    
+    .tech-stack-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: bold; margin-bottom: 8px; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .project-tag { background: rgba(108,99,255,0.1); color: var(--accent); padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; border: 1px solid var(--border); }
 
-    .project-emoji { font-size: 1.8rem; margin-bottom: 12px; }
-
-    .project-title {
-      font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
-    }
-
-    .project-desc {
-      font-size: .88rem; color: var(--muted); margin-bottom: 14px;
-    }
-
-    .project-role {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: .78rem; font-weight: 600;
-      color: var(--accent2); background: rgba(245,0,87,.12);
-      border: 1px solid rgba(245,0,87,.3);
-      border-radius: 20px; padding: 3px 10px;
-      margin-bottom: 10px;
-    }
-
-    .project-tags-label {
-      font-size: .72rem; color: var(--muted); font-weight: 600;
-      text-transform: uppercase; letter-spacing: .5px;
-      margin-bottom: 6px;
-    }
-
-    .project-tags {
-      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
-    }
-    .project-tag {
-      font-size: .75rem; background: rgba(108,99,255,.18);
-      color: var(--accent); border-radius: 4px; padding: 2px 8px;
-    }
-
-    .project-links { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .remove-project-btn {
-      position: absolute; top: 12px; right: 12px;
-      background: var(--accent2); color: #fff;
-      border: none; border-radius: 6px;
-      padding: 3px 8px; font-size: .75rem;
-      cursor: pointer; display: none;
-    }
+    .remove-project-btn { position: absolute; top: 10px; right: 10px; background: var(--accent2); color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; display: none; }
     .editing .remove-project-btn { display: block; }
+    
+    .editing #add-project-btn { display: block; margin: 30px auto; }
+    #add-project-btn { display: none; }
 
-    #add-project-btn { display: none; margin-top: 24px; }
-    .editing #add-project-btn { display: inline-flex; }
-
-    /* ── Add-project modal ────────────────────────────────────── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 500;
-      background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
-      align-items: center; justify-content: center;
-    }
+    /* ── Modal & Others ───────────────────────────────────────── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px; width: min(480px, 92vw);
-      max-height: 90vh; overflow-y: auto;
-    }
-    .modal h3 { font-size: 1.2rem; margin-bottom: 20px; }
-
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: 5px; }
-    .form-group input, .form-group textarea {
-      width: 100%; background: var(--card);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 9px 12px; color: var(--text); font-size: .9rem;
-      resize: vertical;
-    }
-    .form-group input:focus, .form-group textarea:focus {
-      outline: none; border-color: var(--accent);
-    }
-    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-
-    /* ── Inline editable ──────────────────────────────────────── */
-    [contenteditable="true"] {
-      outline: none;
-      border-bottom: 2px dashed var(--accent);
-      border-radius: 2px; padding: 2px 4px;
-      cursor: text; transition: background .2s;
-    }
-    [contenteditable="true"]:focus {
-      background: rgba(108,99,255,.12);
-    }
-    [contenteditable="true"]:hover { background: rgba(108,99,255,.08); }
-
-    /* ── Footer ───────────────────────────────────────────────── */
-    footer {
-      text-align: center; padding: 30px;
-      color: var(--muted); font-size: .82rem;
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── Responsive ───────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      #hero { flex-direction: column; text-align: center; padding: 80px 0 50px; }
-      .hero-contacts { justify-content: center; }
-    }
+    .modal { background: var(--surface); padding: 30px; border-radius: 15px; width: 450px; max-width: 90%; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: var(--muted); }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; background: var(--card); border: 1px solid var(--border); color: white; border-radius: 8px; }
+    
+    [contenteditable="true"] { border-bottom: 2px dashed var(--accent); outline: none; }
+    footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); margin-top: 50px; color: var(--muted); }
   </style>
 </head>
 <body>
 
-<!-- ── Edit-mode bar ──────────────────────────────────────────── -->
 <div id="edit-bar" class="hidden">
-  ✏️ Edit mode is ON — click any text to edit it, then press
-  <kbd style="background:rgba(255,255,255,.2);border-radius:4px;padding:1px 6px">Save</kbd>
-  when done.
-  <button class="btn btn-primary" id="save-btn" onclick="savePortfolio()">💾 Save</button>
-  <button class="btn btn-ghost" id="cancel-btn" onclick="cancelEdit()">✕ Cancel</button>
+  ✏️ Chế độ chỉnh sửa đang BẬT. Nhấp vào chữ để sửa, sau đó nhấn: 
+  <button class="btn btn-primary" onclick="savePortfolio()">💾 Lưu lại</button>
+  <button class="btn btn-ghost" onclick="cancelEdit()">✕ Hủy</button>
 </div>
 
-<!-- ── Navigation ────────────────────────────────────────────── -->
-<nav id="main-nav">
+<nav>
   <div class="container">
-    <span class="nav-brand">&#60;<span id="nav-name">Portfolio</span>/&#62;</span>
+    <span class="nav-brand">&lt;<span id="nav-name">Portfolio</span>/&gt;</span>
     <ul class="nav-links">
       <li><a href="#hero">Home</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
     </ul>
     <button id="toggle-edit-btn" onclick="toggleEdit()">✏️ Edit</button>
   </div>
 </nav>
 
-<!-- ── Hero ──────────────────────────────────────────────────── -->
 <div class="container">
   <section id="hero">
-
-    <!-- Avatar -->
     <div class="avatar-wrap">
-      <img id="avatar" src="" alt="Profile photo" />
-      <button id="avatar-edit-btn" title="Change avatar" onclick="openAvatarDialog()">📷</button>
-      <input id="avatar-file" type="file" accept="image/*" style="display:none" onchange="handleAvatarFile(event)" />
+      <img id="avatar" src="https://via.placeholder.com/150" alt="Avatar" />
+      <button id="avatar-edit-btn" onclick="openAvatarDialog()">📷</button>
+      <input id="avatar-file" type="file" style="display:none" onchange="handleAvatarFile(event)" />
     </div>
-
-    <!-- Text -->
     <div class="hero-text">
-      <p class="hero-greeting">👋 Hello, I'm</p>
-      <h1 class="hero-name">
-        <span id="hero-name">Your Name</span>
-      </h1>
-      <p class="hero-title" id="hero-title">Full-Stack Developer &amp; Designer</p>
-      <p class="hero-bio" id="hero-bio">
-        Passionate about building beautiful, accessible, and high-performance web experiences.
-        I love turning ideas into elegant digital products.
-      </p>
-      <div class="hero-contacts" id="hero-contacts-wrap">
-        <span class="contact-item">📧 <span id="contact-email">hello@example.com</span></span>
-        <span class="contact-item">🌍 <span id="contact-location">City, Country</span></span>
-        <span class="contact-item">🔗 <span id="contact-github">github.com/yourhandle</span></span>
-      </div>
+      <h1 class="hero-name" id="hero-name">Tên Của Bạn</h1>
+      <p class="hero-title" id="hero-title">Vị trí công việc (vd: Web Developer)</p>
+      <p class="hero-bio" id="hero-bio">Đoạn giới thiệu ngắn về bản thân bạn tại đây.</p>
     </div>
-
   </section>
-</div>
 
-<!-- ── Skills ────────────────────────────────────────────────── -->
-<div class="container">
   <section id="skills">
-    <div class="divider"></div>
-    <h2 class="section-title">My <span>Skills</span></h2>
-    <p class="section-sub" id="skills-sub">Technologies &amp; tools I work with</p>
-
+    <h2 style="margin-bottom: 10px;">My <span>Skills</span></h2>
     <div class="skills-grid" id="skills-grid"></div>
-
-    <!-- add skill row (visible in edit mode) -->
     <div id="add-skill-wrap">
-      <input id="new-skill-input" type="text" placeholder="New skill (e.g. Docker)" />
-      <button class="btn btn-primary" onclick="addSkill()">+ Add</button>
+      <input id="new-skill-input" type="text" placeholder="Thêm kỹ năng mới..." />
+      <button class="btn btn-primary" onclick="addSkill()">+ Thêm</button>
     </div>
   </section>
-</div>
 
-<!-- ── Projects ───────────────────────────────────────────────── -->
-<div class="container">
   <section id="projects">
-    <div class="divider"></div>
-    <h2 class="section-title">My <span>Projects</span></h2>
-    <p class="section-sub" id="projects-sub">Things I've built</p>
-
+    <h2 style="margin-bottom: 20px; text-align: center;">My <span>Projects</span></h2>
     <div class="projects-grid" id="projects-grid"></div>
-
-    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">
-      + Add Project
-    </button>
+    <button class="btn btn-primary" id="add-project-btn" onclick="openAddProjectModal()">+ Thêm Dự Án Mới</button>
   </section>
 </div>
 
-<!-- ── Contact ────────────────────────────────────────────────── -->
-<div class="container">
-  <section id="contact">
-    <div class="divider"></div>
-    <h2 class="section-title">Get In <span>Touch</span></h2>
-    <p class="section-sub">Have a project in mind? Let's talk.</p>
-    <p id="contact-msg" style="max-width:500px;color:var(--muted);">
-      I'm open to freelance opportunities, collaborations and full-time roles.
-      Feel free to reach out anytime — I usually respond within 24 hours.
-    </p>
-  </section>
-</div>
-
-<!-- ── Footer ────────────────────────────────────────────────── -->
 <footer>
-  <p>© <span id="footer-year"></span> <span id="footer-name">Your Name</span>. Built with ❤️ and pure HTML.</p>
+  <p>© <span id="footer-year"></span> <span id="footer-name">Name</span>. Created with ❤️</p>
 </footer>
 
-<!-- ── Add-project modal ──────────────────────────────────────── -->
 <div class="modal-overlay" id="project-modal">
   <div class="modal">
-    <h3>➕ Add New Project</h3>
+    <h3>🚀 Thêm Dự Án</h3>
     <div class="form-group">
-      <label>Emoji / Icon</label>
-      <input id="m-emoji" placeholder="🚀" maxlength="4" />
-    </div>
-    <div class="form-group">
-      <label>Title *</label>
-      <input id="m-title" placeholder="Project name" />
+      <label>Tên dự án</label>
+      <input id="m-title" placeholder="VD: Website Bán Hàng" />
     </div>
     <div class="form-group">
-      <label>Your Role</label>
-      <input id="m-role" placeholder="e.g. Full-Stack Developer, Frontend Developer" />
+      <label>Mô tả (Dự án làm gì? Giải quyết vấn đề gì?)</label>
+      <textarea id="m-desc" rows="3" placeholder="Mô tả ngắn gọn về chức năng dự án..."></textarea>
     </div>
     <div class="form-group">
-      <label>Description *</label>
-      <textarea id="m-desc" rows="3" placeholder="A short description…"></textarea>
+      <label>Công nghệ sử dụng (Cách nhau bằng dấu phẩy)</label>
+      <input id="m-tags" placeholder="VD: React, Node.js, Firebase" />
     </div>
     <div class="form-group">
-      <label>Tags (comma-separated)</label>
-      <input id="m-tags" placeholder="React, Node.js, MongoDB" />
+      <label>Link Demo (Nếu có)</label>
+      <input id="m-demo" placeholder="https://..." />
     </div>
-    <div class="form-group">
-      <label>Live Demo URL</label>
-      <input id="m-demo" placeholder="https://…" />
-    </div>
-    <div class="form-group">
-      <label>Source Code URL</label>
-      <input id="m-source" placeholder="https://github.com/…" />
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeAddProjectModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="addProject()">Add Project</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── Avatar URL modal ───────────────────────────────────────── -->
-<div class="modal-overlay" id="avatar-modal">
-  <div class="modal">
-    <h3>🖼️ Change Avatar</h3>
-    <div class="form-group">
-      <label>Upload from device</label>
-      <button class="btn btn-ghost" onclick="document.getElementById('avatar-file').click()">
-        📁 Choose file
-      </button>
-    </div>
-    <div class="form-group">
-      <label>— or paste image URL —</label>
-      <input id="avatar-url-input" placeholder="https://…/photo.jpg" />
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeAvatarModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="applyAvatarUrl()">Apply</button>
+    <div class="modal-actions" style="text-align: right;">
+      <button class="btn btn-ghost" onclick="closeAddProjectModal()">Hủy</button>
+      <button class="btn btn-primary" onclick="addProject()">Xác nhận</button>
     </div>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════
-   DATA — default state
-════════════════════════════════════════════════════════════════ */
-const DEFAULT_DATA = {
-  name:     "Your Name",
-  title:    "Full-Stack Developer & Designer",
-  bio:      "Passionate about building beautiful, accessible, and high-performance web experiences. I love turning ideas into elegant digital products.",
-  email:    "hello@example.com",
-  location: "City, Country",
-  github:   "github.com/yourhandle",
-  contactMsg: "I'm open to freelance opportunities, collaborations and full-time roles. Feel free to reach out anytime — I usually respond within 24 hours.",
-  avatar:   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%236c63ff'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%23fff' opacity='.9'/%3E%3Cellipse cx='50' cy='82' rx='26' ry='20' fill='%23fff' opacity='.9'/%3E%3C/svg%3E",
-  skills: [
-    "HTML5", "CSS3", "JavaScript", "TypeScript",
-    "React", "Node.js", "Python", "Git"
-  ],
+let data = {
+  name: "Nguyễn Văn A",
+  title: "Frontend Developer",
+  bio: "Tôi là một lập trình viên yêu thích sáng tạo các giao diện web đẹp mắt và hiệu quả.",
+  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+  skills: ["HTML", "CSS", "JavaScript", "React", "Git"],
   projects: [
     {
-      emoji: "🛒",
-      title: "E-Commerce App",
-      role:  "Full-Stack Developer",
-      desc:  "A full-stack e-commerce platform with cart, payments and admin dashboard.",
-      tags:  ["React","Node.js","MongoDB"],
-      demo:  "#",
-      source:"https://github.com/yourhandle/ecommerce-app"
-    },
-    {
-      emoji: "🌤️",
-      title: "Weather Dashboard",
-      role:  "Frontend Developer",
-      desc:  "Real-time weather forecasts with beautiful charts powered by OpenWeatherMap.",
-      tags:  ["Vue","Chart.js","OpenWeatherMap"],
-      demo:  "#",
-      source:"https://github.com/yourhandle/weather-dashboard"
-    },
-    {
-      emoji: "📝",
-      title: "Markdown Blog",
-      role:  "Solo Developer",
-      desc:  "A blazing-fast static blog engine that renders Markdown files on the fly.",
-      tags:  ["Next.js","MDX","Tailwind"],
-      demo:  "#",
-      source:"https://github.com/yourhandle/markdown-blog"
+      title: "Dự án mẫu 01",
+      desc: "Đây là một ứng dụng quản lý công việc giúp người dùng tối ưu hóa thời gian hằng ngày.",
+      tags: ["React", "CSS Grid", "LocalStorage"],
+      demo: "#"
     }
   ]
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   STATE
-════════════════════════════════════════════════════════════════ */
-let data   = JSON.parse(JSON.stringify(DEFAULT_DATA));
-let editMode = false;
-let snapshot = null; // copy before edit, for cancel
-
-/* ═══════════════════════════════════════════════════════════════
-   BOOT
-════════════════════════════════════════════════════════════════ */
-(function init() {
-  const saved = localStorage.getItem("portfolio-data");
-  if (saved) {
-    try { data = JSON.parse(saved); } catch(e) { /* use default */ }
-  }
+function init() {
+  const saved = localStorage.getItem("my-portfolio-data");
+  if (saved) data = JSON.parse(saved);
   document.getElementById("footer-year").textContent = new Date().getFullYear();
   render();
-})();
+}
 
-/* ═══════════════════════════════════════════════════════════════
-   RENDER — push data → DOM
-════════════════════════════════════════════════════════════════ */
 function render() {
-  setText("hero-name",       data.name);
-  setText("nav-name",        data.name);
-  setText("footer-name",     data.name);
-  setText("hero-title",      data.title);
-  setText("hero-bio",        data.bio);
-  setText("contact-email",   data.email);
-  setText("contact-location",data.location);
-  setText("contact-github",  data.github);
-  setText("contact-msg",     data.contactMsg);
+  document.getElementById("hero-name").textContent = data.name;
+  document.getElementById("nav-name").textContent = data.name;
+  document.getElementById("footer-name").textContent = data.name;
+  document.getElementById("hero-title").textContent = data.title;
+  document.getElementById("hero-bio").textContent = data.bio;
+  document.getElementById("avatar").src = data.avatar;
 
-  const avatar = document.getElementById("avatar");
-  avatar.src = data.avatar || DEFAULT_DATA.avatar;
+  // Render Skills
+  const sGrid = document.getElementById("skills-grid");
+  sGrid.innerHTML = data.skills.map((s, i) => `
+    <div class="skill-tag">
+      ${s} <span class="remove-skill" onclick="removeSkill(${i})">✕</span>
+    </div>
+  `).join('');
 
-  renderSkills();
-  renderProjects();
-}
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-function renderSkills() {
-  const grid = document.getElementById("skills-grid");
-  grid.innerHTML = "";
-  data.skills.forEach((skill, i) => {
-    const tag = document.createElement("span");
-    tag.className = "skill-tag";
-
-    const label = document.createElement("span");
-    label.textContent = skill;
-
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "remove-skill";
-    removeBtn.textContent = "✕";
-    removeBtn.title = "Remove";
-    removeBtn.onclick = () => { const idx = data.skills.indexOf(skill); if (idx !== -1) { data.skills.splice(idx, 1); renderSkills(); } };
-
-    tag.appendChild(label);
-    tag.appendChild(removeBtn);
-    grid.appendChild(tag);
-  });
-}
-
-function renderProjects() {
-  const grid = document.getElementById("projects-grid");
-  grid.innerHTML = "";
-  data.projects.forEach((p, i) => {
-    const card = document.createElement("div");
-    card.className = "project-card";
-
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "remove-project-btn";
-    removeBtn.textContent = "✕ Remove";
-    removeBtn.onclick = () => { const idx = data.projects.indexOf(p); if (idx !== -1) { data.projects.splice(idx, 1); renderProjects(); } };
-
-    const tags = (p.tags || []).map(t =>
-      `<span class="project-tag">${escHtml(t)}</span>`).join("");
-
-    card.innerHTML = `
-      <div class="project-emoji">${p.emoji || "📁"}</div>
-      <div class="project-title">${escHtml(p.title)}</div>
-      ${p.role ? `<div class="project-role">👤 ${escHtml(p.role)}</div>` : ""}
-      <div class="project-desc">${escHtml(p.desc)}</div>
-      ${tags ? `<div class="project-tags-label">🛠️ Built with</div>` : ""}
-      <div class="project-tags">${tags}</div>
-      <div class="project-links">
-        ${p.demo   ? `<a class="btn btn-primary" href="${escHtml(p.demo)}"   target="_blank" rel="noopener">🔗 Demo</a>` : ""}
-        ${p.source ? `<a class="btn btn-ghost"  href="${escHtml(p.source)}" target="_blank" rel="noopener">⭐ GitHub</a>` : ""}
+  // Render Projects
+  const pGrid = document.getElementById("projects-grid");
+  pGrid.innerHTML = data.projects.map((p, i) => `
+    <div class="project-card">
+      <button class="remove-project-btn" onclick="removeProject(${i})">✕ Xóa</button>
+      <div class="project-title">${p.title}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="tech-stack-label">🛠️ Công nghệ:</div>
+      <div class="project-tags">
+        ${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
       </div>
-    `;
-    card.prepend(removeBtn);
-    grid.appendChild(card);
-  });
+      <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="width: fit-content;">Xem Demo</a>
+    </div>
+  `).join('');
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   EDIT MODE
-════════════════════════════════════════════════════════════════ */
-const EDITABLE_IDS = [
-  "hero-name","hero-title","hero-bio",
-  "contact-email","contact-location","contact-github",
-  "contact-msg"
-];
-
+let editMode = false;
 function toggleEdit() {
-  editMode ? cancelEdit() : enterEdit();
-}
-
-function enterEdit() {
-  editMode = true;
-  snapshot = JSON.parse(JSON.stringify(data));
-
-  document.body.classList.add("editing");
-  document.getElementById("edit-bar").classList.remove("hidden");
-  document.getElementById("toggle-edit-btn").textContent = "✕ Cancel";
-
-  EDITABLE_IDS.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.contentEditable = "true";
-  });
-}
-
-function cancelEdit() {
-  editMode = false;
-  data = JSON.parse(JSON.stringify(snapshot));
-
-  document.body.classList.remove("editing");
-  document.getElementById("edit-bar").classList.add("hidden");
-  document.getElementById("toggle-edit-btn").textContent = "✏️ Edit";
-
-  EDITABLE_IDS.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.contentEditable = "false";
-  });
-
-  render(); // restore
+  editMode = !editMode;
+  document.body.classList.toggle("editing", editMode);
+  document.getElementById("edit-bar").classList.toggle("hidden", !editMode);
+  document.getElementById("toggle-edit-btn").textContent = editMode ? "✕ Hủy" : "✏️ Edit";
+  
+  const fields = ["hero-name", "hero-title", "hero-bio"];
+  fields.forEach(id => document.getElementById(id).contentEditable = editMode);
 }
 
 function savePortfolio() {
-  // harvest text from editable elements
-  data.name         = getText("hero-name");
-  data.title        = getText("hero-title");
-  data.bio          = getText("hero-bio");
-  data.email        = getText("contact-email");
-  data.location     = getText("contact-location");
-  data.github       = getText("contact-github");
-  data.contactMsg   = getText("contact-msg");
-
-  localStorage.setItem("portfolio-data", JSON.stringify(data));
-
-  editMode = false;
-  document.body.classList.remove("editing");
-  document.getElementById("edit-bar").classList.add("hidden");
-  document.getElementById("toggle-edit-btn").textContent = "✏️ Edit";
-
-  EDITABLE_IDS.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.contentEditable = "false";
-  });
-
+  data.name = document.getElementById("hero-name").textContent;
+  data.title = document.getElementById("hero-title").textContent;
+  data.bio = document.getElementById("hero-bio").textContent;
+  localStorage.setItem("my-portfolio-data", JSON.stringify(data));
+  toggleEdit();
   render();
-  showToast("✅ Portfolio saved!");
+  alert("Đã lưu thành công!");
 }
 
-function getText(id) {
-  const el = document.getElementById(id);
-  return el ? el.textContent.trim() : "";
-}
+function cancelEdit() { location.reload(); }
 
-/* ═══════════════════════════════════════════════════════════════
-   SKILLS
-════════════════════════════════════════════════════════════════ */
 function addSkill() {
   const input = document.getElementById("new-skill-input");
-  const val   = input.value.trim();
-  if (!val) return;
-  if (data.skills.includes(val)) { showToast("Skill already added!"); return; }
-  data.skills.push(val);
-  input.value = "";
-  renderSkills();
+  if(input.value) {
+    data.skills.push(input.value);
+    input.value = "";
+    render();
+  }
 }
 
-document.getElementById("new-skill-input").addEventListener("keydown", e => {
-  if (e.key === "Enter") addSkill();
-});
+function removeSkill(i) { data.skills.splice(i, 1); render(); }
 
-/* ═══════════════════════════════════════════════════════════════
-   PROJECTS
-════════════════════════════════════════════════════════════════ */
-function openAddProjectModal() {
-  ["m-emoji","m-title","m-role","m-desc","m-tags","m-demo","m-source"]
-    .forEach(id => { document.getElementById(id).value = ""; });
-  document.getElementById("project-modal").classList.add("open");
-}
-function closeAddProjectModal() {
-  document.getElementById("project-modal").classList.remove("open");
-}
+function openAddProjectModal() { document.getElementById("project-modal").classList.add("open"); }
+function closeAddProjectModal() { document.getElementById("project-modal").classList.remove("open"); }
 
 function addProject() {
-  const title = document.getElementById("m-title").value.trim();
-  const desc  = document.getElementById("m-desc").value.trim();
-  if (!title || !desc) { showToast("Title and description are required."); return; }
-
-  const rawTags = document.getElementById("m-tags").value;
-  const tags = rawTags.split(",").map(t => t.trim()).filter(Boolean);
-
-  data.projects.push({
-    emoji:  document.getElementById("m-emoji").value.trim()  || "📁",
-    title,
-    role:   document.getElementById("m-role").value.trim(),
-    desc,
-    tags,
-    demo:   document.getElementById("m-demo").value.trim(),
-    source: document.getElementById("m-source").value.trim()
-  });
-
-  renderProjects();
-  closeAddProjectModal();
+  const title = document.getElementById("m-title").value;
+  const desc = document.getElementById("m-desc").value;
+  const tags = document.getElementById("m-tags").value.split(",").map(t => t.trim());
+  
+  if(title && desc) {
+    data.projects.push({ title, desc, tags, demo: document.getElementById("m-demo").value || "#" });
+    closeAddProjectModal();
+    render();
+  }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   AVATAR
-════════════════════════════════════════════════════════════════ */
-function openAvatarDialog() {
-  document.getElementById("avatar-url-input").value = "";
-  document.getElementById("avatar-modal").classList.add("open");
-}
-function closeAvatarModal() {
-  document.getElementById("avatar-modal").classList.remove("open");
-}
+function removeProject(i) { data.projects.splice(i, 1); render(); }
 
-function applyAvatarUrl() {
-  const url = document.getElementById("avatar-url-input").value.trim();
-  if (!url) { showToast("Please enter a URL."); return; }
-  data.avatar = url;
-  document.getElementById("avatar").src = url;
-  closeAvatarModal();
-}
-
+function openAvatarDialog() { document.getElementById("avatar-file").click(); }
 function handleAvatarFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    data.avatar = ev.target.result;
-    document.getElementById("avatar").src = ev.target.result;
-    closeAvatarModal();
-  };
-  reader.readAsDataURL(file);
+  reader.onload = () => { data.avatar = reader.result; render(); };
+  reader.readAsDataURL(e.target.files[0]);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   TOAST
-════════════════════════════════════════════════════════════════ */
-function showToast(msg) {
-  const t = document.createElement("div");
-  t.textContent = msg;
-  Object.assign(t.style, {
-    position:"fixed", bottom:"24px", right:"24px", zIndex:"9999",
-    background:"var(--accent)", color:"#fff",
-    padding:"10px 20px", borderRadius:"8px",
-    fontSize:".88rem", fontWeight:"600",
-    boxShadow:"0 4px 20px rgba(0,0,0,.4)",
-    transition:"opacity .4s"
-  });
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = "0"; }, 2400);
-  setTimeout(() => t.remove(), 2800);
-}
-
-/* close modals on overlay click */
-document.querySelectorAll(".modal-overlay").forEach(overlay => {
-  overlay.addEventListener("click", e => {
-    if (e.target === overlay) overlay.classList.remove("open");
-  });
-});
+init();
 </script>
 </body>
 </html>
