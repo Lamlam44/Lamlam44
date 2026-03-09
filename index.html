@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trương Thành Lâm | Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     /* ── Reset & Base ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --accent:  #6c63ff;
-      --accent2: #f50057;
       --bg:      #0f0f1a;
       --surface: #1a1a2e;
       --card:    #16213e;
       --text:    #e0e0f0;
-      --muted:    #8888aa;
+      --muted:   #8888aa;
       --border:  rgba(108,99,255,.35);
       --radius:  12px;
     }
@@ -24,17 +24,21 @@
       background: var(--bg); color: var(--text);
       line-height: 1.6; min-height: 100vh;
     }
-    a { color: var(--accent); text-decoration: none; }
+    a { color: var(--accent); text-decoration: none; transition: 0.2s; }
+    a:hover { color: #fff; }
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
     
     /* ── Utility ── */
     .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 18px; border-radius: 8px; border: none;
-      cursor: pointer; font-size: .85rem; font-weight: 600; transition: 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 24px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: .9rem; font-weight: 600; transition: 0.3s;
+      text-decoration: none;
     }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,99,255,0.4); color: #fff; }
     .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { background: rgba(108,99,255,0.1); color: #fff; }
+    .btn-ghost:hover { background: rgba(108,99,255,0.1); color: #fff; border-color: var(--accent); }
 
     /* ── Nav ── */
     nav {
@@ -44,37 +48,37 @@
     }
     nav .container { display: flex; align-items: center; justify-content: space-between; height: 60px; }
     .nav-brand { font-weight: 800; color: var(--accent); font-size: 1.2rem; }
-    .nav-links { display: flex; gap: 20px; list-style: none; }
-    .nav-links a { color: var(--muted); font-size: .9rem; transition: 0.2s; }
-    .nav-links a:hover { color: #fff; }
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+
+    /* ── Hero ── */
+    #hero { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; padding: 120px 0 60px; }
+    #avatar { width: 200px; height: 200px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; box-shadow: 0 0 30px rgba(108,99,255,0.3); }
+    .hero-name { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+    .hero-contact { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0; color: var(--muted); font-size: 0.95rem; }
+    .contact-item { display: flex; align-items: center; gap: 8px; }
+    .hero-btns { display: flex; gap: 15px; margin-top: 25px; }
 
     /* ── Sections ── */
     section { padding: 80px 0 40px; }
     .section-title { font-size: 2.2rem; margin-bottom: 40px; text-align: center; font-weight: 800; }
     .section-title span { color: var(--accent); }
 
-    /* Hero */
-    #hero { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; padding-top: 100px; }
-    #avatar { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; box-shadow: 0 0 30px rgba(108,99,255,0.3); }
-    .hero-name { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; }
-    .hero-name span { color: var(--accent); }
-
-    /* About */
-    #about { background: var(--surface); border-radius: var(--radius); padding: 40px; margin-top: 20px; border: 1px solid var(--border); }
-    #about-text { font-size: 1.1rem; color: var(--text); line-height: 1.8; }
-
+    /* Education & About */
+    .info-card { background: var(--surface); border-radius: var(--radius); padding: 40px; border: 1px solid var(--border); margin-bottom: 30px; }
+    .edu-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+    .edu-title { color: var(--accent); font-size: 1.2rem; font-weight: 700; }
+    
     /* Skills */
-    .skills-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-    .skill-tag { background: var(--card); border: 1px solid var(--border); padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 10px; font-weight: 600; transition: 0.3s; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .skill-tag { background: var(--card); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
     .skill-tag:hover { border-color: var(--accent); transform: translateY(-3px); background: rgba(108,99,255,0.1); }
 
     /* Projects */
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; position: relative; display: flex; flex-direction: column; transition: 0.3s; }
+    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; height: 100%; display: flex; flex-direction: column; transition: 0.3s; }
     .project-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .p-title { font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 15px; }
+    .p-title { font-size: 1.3rem; font-weight: 800; color: var(--accent); margin-bottom: 15px; }
     .p-desc { font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; color: var(--text); }
-    .p-tags-label { font-size: 0.75rem; color: var(--muted); font-weight: bold; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
     .p-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
     .p-tag { font-size: 0.75rem; background: rgba(108,99,255,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); color: var(--accent); }
 
@@ -85,10 +89,10 @@
 
 <nav>
   <div class="container">
-    <span class="nav-brand">&lt;<span id="nav-name">Portfolio</span>/&gt;</span>
+    <span class="nav-brand">&lt;<span>Lâm</span>.dev/&gt;</span>
     <ul class="nav-links">
-      <li><a href="#hero">Home</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="#education">Education</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
     </ul>
@@ -102,20 +106,54 @@
     </div>
     <div class="hero-text">
       <p style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Full-stack Developer</p>
-      <h1 class="hero-name">Hi, I'm <span id="hero-name">Trương Thành Lâm</span></h1>
-      <p class="hero-title" id="hero-title" style="font-size: 1.4rem; color: var(--muted); margin-top: 10px;">Specializing in Java & React ecosystems</p>
+      <h1 class="hero-name">Trương Thành Lâm</h1>
+      
+      <div class="hero-contact">
+        <div class="contact-item"><i class="fas fa-envelope"></i> lamtruong6442@gmail.com</div>
+        <div class="contact-item"><i class="fas fa-phone"></i> 0765-980-183</div>
+        <div class="contact-item"><i class="fas fa-map-marker-alt"></i> Ho Chi Minh City, Vietnam</div>
+      </div>
+
+      <div class="hero-btns">
+        <a href="Resume.pdf" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> View Resume</a>
+        <a href="https://github.com/Lamlam44" target="_blank" class="btn btn-ghost"><i class="fab fa-github"></i> GitHub Profile</a>
+      </div>
     </div>
   </section>
 
   <section id="about">
-    <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">About <span>Me</span></h2>
-    <p id="about-text">
-      Full-stack Developer with a solid foundation in Java and the Spring ecosystem. I specialize in building robust backend services and seamless user interfaces using React. Passionate about writing clean, maintainable code and developing scalable web applications that solve real-world problems.
-    </p>
+    <h2 class="section-title">About <span>Me</span></h2>
+    <div class="info-card">
+      <p id="about-text">
+        Full-stack Developer with a solid foundation in Java and the Spring ecosystem. I specialize in building robust backend services and seamless user interfaces using React. Passionate about writing clean, maintainable code and developing scalable web applications that solve real-world problems.
+      </p>
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+        <p><strong><i class="fas fa-camera"></i> Hobby:</strong> Landscape Photography – Capturing and preserving the beauty and tranquility of surrounding nature.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2 class="section-title">My <span>Education</span></h2>
+    <div class="info-card">
+      <div class="edu-header">
+        <div>
+          <div class="edu-title">Sai Gon University (SGU)</div>
+          <p>Engineer of Information Technology</p>
+        </div>
+        <div style="text-align: right;">
+          <p>2022 – Present</p>
+          <p><strong>GPA: 2.77 / 4.0</strong></p>
+        </div>
+      </div>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-top: 10px;">
+        <strong>Relevant Coursework:</strong> Data Structures and Algorithms, Object-Oriented Programming (OOP), Database Management Systems, Operating Systems, Computer Networks, Software Engineering, Web Development, Java Programming, Python for Data Science.
+      </p>
+    </div>
   </section>
 
   <section id="skills">
-    <h2 class="section-title">My <span>Skills</span></h2>
+    <h2 class="section-title">Technical <span>Skills</span></h2>
     <div class="skills-grid" id="skills-grid"></div>
   </section>
 
@@ -126,27 +164,22 @@
 </div>
 
 <footer>
-  <p>© <span id="footer-year"></span> <span id="footer-name">Trương Thành Lâm</span>. Built with Passion & Caffeine.</p>
+  <p>© 2026 Trương Thành Lâm. Built with Passion & Caffeine.</p>
 </footer>
 
 <script>
-// STATIC DATA
 const data = {
-  name: "Trương Thành Lâm",
-  title: "Full-stack Developer | Java & React",
-  about: "Full-stack Developer with a solid foundation in Java and the Spring ecosystem. I specialize in building robust backend services and seamless user interfaces using React. Passionate about writing clean, maintainable code and developing scalable web applications that solve real-world problems.",
-  avatar: "https://i.postimg.cc/W1H8Lw8h/z7603130479718_f720465194abab7eb5ef2427e250938f.jpg",
-  skills: ["React", "Git", "MySQL", "Java Core", "Spring Boot", "JavaScript", "TypeScript"],
+  skills: ["Python", "Java", "JavaScript", "TypeScript", "HTML/CSS", "Git/GitHub", "VS Code", "Docker"],
   projects: [
     {
       title: "Tour Booking & Management System",
-      desc: "A specialized end-to-end solution for travel agencies to automate tour operations and online sales. Features a secure Admin Dashboard for management and a high-performance Booking Portal for customers.",
+      desc: "Developed a full-stack web application for travel agencies to manage tour operations and online sales. Built a secure Admin Dashboard and a high-performance Booking Portal.",
       tags: ["React", "Spring Boot", "Java", "MySQL"],
       demo: "https://github.com/Lamlam44/WebBanTour_3122410209_3122410183_3122410222_3122410220"
     },
     {
       title: "Fast Food Management System",
-      desc: "An integrated management tool for fast food outlets that handles daily sales transactions (POS) and provides a comprehensive data dashboard for tracking business performance and inventory.",
+      desc: "Designed an integrated management tool for fast food outlets to handle daily sales transactions (POS) and inventory tracking.",
       tags: ["Java", "Spring Boot", "MySQL", "React"],
       demo: "https://github.com/miduhito/JAV"
     }
@@ -154,35 +187,19 @@ const data = {
 };
 
 function init() {
-  document.getElementById("footer-year").textContent = new Date().getFullYear();
-  render();
-}
-
-function render() {
-  document.getElementById("hero-name").textContent = data.name;
-  document.getElementById("nav-name").textContent = data.name;
-  document.getElementById("footer-name").textContent = data.name;
-  document.getElementById("hero-title").textContent = data.title;
-  document.getElementById("about-text").textContent = data.about;
-  document.getElementById("avatar").src = data.avatar;
-
   const sGrid = document.getElementById("skills-grid");
-  sGrid.innerHTML = data.skills.map(s => `
-    <div class="skill-tag">${s}</div>
-  `).join('');
+  sGrid.innerHTML = data.skills.map(s => `<div class="skill-tag">${s}</div>`).join('');
 
   const pGrid = document.getElementById("projects-grid");
   pGrid.innerHTML = data.projects.map(p => `
     <div class="project-card">
       <div class="p-title">${p.title}</div>
       <div class="p-desc">${p.desc}</div>
-      <div class="p-tags-label">Tech Stack:</div>
       <div class="p-tags">${p.tags.map(t => `<span class="p-tag">${t}</span>`).join('')}</div>
-      <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="margin-top: 15px; width: fit-content; border-color: var(--accent); color: var(--accent);">View Project</a>
+      <a href="${p.demo}" class="btn btn-ghost" target="_blank" style="width: fit-content;">View on GitHub</a>
     </div>
   `).join('');
 }
-
 init();
 </script>
 </body>
